@@ -1,11 +1,14 @@
 import { useForm } from "react-hook-form";
 import useAuth from "../../../hooks/useAuth";
 import { toast } from "react-toastify";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import SocialLogin from "../login/socialLogin/SocialLogin";
+import axios from "axios";
 
 const Register = () => {
-  const { registerUser } = useAuth();
+  const { registerUser, updateUserProfile } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -13,9 +16,34 @@ const Register = () => {
   } = useForm();
 
   const handleRegister = (data) => {
+    const profileImg = data.photo[0];
+
     registerUser(data.email, data.password)
       .then((result) => {
         console.log(result);
+        // Store the image and get the photo url
+
+        const formData = new formData();
+        formData.append("image", profileImg);
+        const image_API_URL = `https://api.imgbb.com/1/upload?key=${
+          import.meta.env.VITE_image_host_key
+        }`;
+        axios.post(image_API_URL, formData).then((res) => {
+          console.log(res.data.data.url);
+          // Update user profile here
+          const userProfile = {
+            displayName: data.name,
+            photoURL: res.data.data.url,
+          };
+          updateUserProfile(userProfile)
+            .then((res) => {
+              console.log(res);
+              navigate(location?.state || "/");
+            })
+            .catch((errors) => {
+              toast.error(errors.code);
+            });
+        });
       })
       .catch((error) => {
         toast.error(error.code);
@@ -29,6 +57,30 @@ const Register = () => {
       <p className="text-center">Please Register with ZapShift</p>
       <form onSubmit={handleSubmit(handleRegister)} className="card-body">
         <fieldset className="fieldset">
+          {/* Name  */}
+          <label className="label">Name</label>
+          <input
+            type="text"
+            {...register("name", { required: true })}
+            className="input"
+            placeholder="Your Name"
+          />
+          {errors.name?.type === "required" && (
+            <p className="text-red-500">Name is required.</p>
+          )}
+          {/* Image*/}
+          <label className="label">Photo</label>
+
+          <input
+            type="file"
+            {...register("photo", { required: true })}
+            className="file-input"
+            placeholder="Your Photo"
+          />
+          {errors.photo?.type === "required" && (
+            <p className="text-red-500">Photo is required.</p>
+          )}
+          {/* Email  */}
           <label className="label">Email</label>
           <input
             type="email"
@@ -67,15 +119,16 @@ const Register = () => {
               character, and no spaces.”
             </p>
           )}
-          <div>
-            <a className="link link-hover">Forgot password?</a>
-          </div>
 
           <button className="btn bg-primary mt-4">Register</button>
         </fieldset>
         <p>
           Already have an account ?{" "}
-          <Link className="text-primary underline" to="/login">
+          <Link
+            state={location.state}
+            className="text-primary underline"
+            to="/login"
+          >
             Login
           </Link>
         </p>

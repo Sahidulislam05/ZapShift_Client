@@ -6,6 +6,10 @@ import AboutUs from "../pages/Aboutus/AboutUs";
 import AuthLayout from "../layouts/AuthLayout";
 import Login from "../pages/Auth/login/Login";
 import Register from "../pages/Auth/register/Register";
+import ForgetPassword from "../pages/Auth/ForgetPassword/ForgetPassword";
+import Rider from "../pages/Rider/Rider";
+import PrivateRoute from "./PrivateRoute";
+import SendParcel from "../pages/sendParcel/SendParcel";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +29,22 @@ const router = createBrowserRouter([
         path: "/about-us",
         Component: AboutUs,
       },
+      {
+        path: "/rider",
+        element: (
+          <PrivateRoute>
+            <Rider></Rider>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/send-parcel",
+        element: (
+          <PrivateRoute>
+            <SendParcel></SendParcel>
+          </PrivateRoute>
+        ),
+      },
     ],
   },
   {
@@ -38,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: "register",
         Component: Register,
+      },
+      {
+        path: "forget-password",
+        Component: ForgetPassword,
       },
     ],
   },

@@ -1,11 +1,14 @@
 import { useForm } from "react-hook-form";
 import useAuth from "../../../hooks/useAuth";
 import { toast } from "react-toastify";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import SocialLogin from "./socialLogin/SocialLogin";
 
 const Login = () => {
   const { signInUser } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -16,6 +19,7 @@ const Login = () => {
     signInUser(data.email, data.password)
       .then((result) => {
         console.log(result);
+        navigate(location?.state || "/");
       })
       .catch((error) => {
         toast.error(error.code);
@@ -69,13 +73,19 @@ const Login = () => {
               </p>
             )}
             <div>
-              <a className="link link-hover">Forgot password?</a>
+              <Link to="/forget-password" className="link link-hover">
+                Forgot password?
+              </Link>
             </div>
             <button className="btn bg-primary mt-4">Login</button>
           </fieldset>
           <p>
             New to ZapShift ?{" "}
-            <Link className="text-primary underline" to="/register">
+            <Link
+              state={location.state}
+              className="text-primary underline"
+              to="/register"
+            >
               Register
             </Link>
           </p>
