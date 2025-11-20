@@ -10,6 +10,8 @@ import ForgetPassword from "../pages/Auth/ForgetPassword/ForgetPassword";
 import Rider from "../pages/Rider/Rider";
 import PrivateRoute from "./PrivateRoute";
 import SendParcel from "../pages/sendParcel/SendParcel";
+import DashboardLayout from "../layouts/DashboardLayout";
+import MyParcels from "../pages/Dashboard/Myparcels/MyParcels";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +46,7 @@ const router = createBrowserRouter([
             <SendParcel></SendParcel>
           </PrivateRoute>
         ),
+        loader: () => fetch("/warehouses.json").then((res) => res.json()),
       },
     ],
   },
@@ -62,6 +65,20 @@ const router = createBrowserRouter([
       {
         path: "forget-password",
         Component: ForgetPassword,
+      },
+    ],
+  },
+  {
+    path: "dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRoute>
+    ),
+    children: [
+      {
+        path: "my-parcels",
+        Component: MyParcels,
       },
     ],
   },
