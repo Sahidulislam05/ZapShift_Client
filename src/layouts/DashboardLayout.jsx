@@ -1,5 +1,6 @@
 import { CiDeliveryTruck } from "react-icons/ci";
 import { RiEBikeFill } from "react-icons/ri";
+import { SiGoogletasks } from "react-icons/si";
 import {
   FaMotorcycle,
   FaRegCreditCard,
@@ -117,6 +118,18 @@ const DashboardLayout = () => {
                       <FaTasks></FaTasks>
                       <span className="is-drawer-close:hidden">
                         Assign deliveries
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                      data-tip="Completed deliveries"
+                      to="/dashboard/completed-deliveries"
+                    >
+                      <SiGoogletasks />
+                      <span className="is-drawer-close:hidden">
+                        Completed deliveries
                       </span>
                     </NavLink>
                   </li>

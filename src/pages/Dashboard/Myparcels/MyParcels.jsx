@@ -4,6 +4,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { FaEdit } from "react-icons/fa";
 import { FaMagnifyingGlass, FaTrashCan } from "react-icons/fa6";
 import Swal from "sweetalert2";
+import { Link } from "react-router";
 // import { Link } from "react-router";
 
 const MyParcels = () => {
@@ -50,6 +51,7 @@ const MyParcels = () => {
       parcelId: parcel._id,
       senderEmail: parcel.senderEmail,
       parcelName: parcel.parcelName,
+      trackingId: parcel.trackingId,
     };
     const res = await axiosSecure.post(
       "/payment-checkout-session",
@@ -99,7 +101,11 @@ const MyParcels = () => {
                     </button>
                   )}
                 </td>
-                <td>{parcel.trackingId}</td>
+                <td>
+                  <Link to={`/parcel-track/${parcel.trackingId}`}>
+                    {parcel.trackingId}
+                  </Link>
+                </td>
                 <td>
                   {typeof parcel.deliveryStatus === "string"
                     ? parcel.deliveryStatus

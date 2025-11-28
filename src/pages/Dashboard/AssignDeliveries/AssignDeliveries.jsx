@@ -17,7 +17,13 @@ const AssignDeliveries = () => {
   });
 
   const handleStatusUpdate = (parcel, status) => {
-    const statusInfo = { deliveryStatus: status };
+    const statusInfo = {
+      deliveryStatus: status,
+      riderId: parcel.riderId,
+      trackingId: parcel.trackingId,
+    };
+
+    let message = `Parcel status update with ${status.split("_").join(" ")}`;
     axiosSecure
       .patch(`/parcels/${parcel._id}/status`, statusInfo)
       .then((res) => {
@@ -26,13 +32,14 @@ const AssignDeliveries = () => {
           Swal.fire({
             position: "top-end",
             icon: "success",
-            title: "Thank you for accepting",
+            title: message,
             showConfirmButton: false,
             timer: 1500,
           });
         }
       });
   };
+
   return (
     <div>
       <h2 className="text-4xl font-semibold mt-10 ml-5">
